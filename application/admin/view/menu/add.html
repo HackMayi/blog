@@ -1,0 +1,128 @@
+{include file="public:header" /}
+{block name="centent"}
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="menu_superior" class="layui-form-label">
+                <span class="x-red">*</span>上级菜单
+            </label>
+            <div class="layui-input-inline">
+                <select id="menu_superior" name="parent_id" lay-verify="">
+                    <option value="0">顶级菜单</option>
+                    {volist name="menu" id="vo"}
+                    <option value="{$vo.id}">{$vo.str}{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_name" class="layui-form-label">
+                <span class="x-red">*</span>名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_name" name="name" required="required" lay-verify="menu_name"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_module" class="layui-form-label">
+                <span class="x-red"></span>模块
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_module" name="module" required="" lay-verify=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_controller" class="layui-form-label">
+                <span class="x-red"></span>控制器
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_controller" name="controller" required="" lay-verify=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_method" class="layui-form-label">
+                <span class="x-red"></span>方法名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_method" name="method" required="" lay-verify=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_icon" class="layui-form-label">
+                <span class="x-red"></span>图标
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_icon" name="icon" lay-verify=""
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span><a onclick="x_admin_show('选择图标','{:url('menu/icon')}')">选择图标</a>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="auth_menu" value="1" title="权限菜单">
+                <input type="radio" name="auth_menu" value="0" title="普通菜单" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="左侧展示">
+                <input type="radio" name="status" value="0" title="普通节点" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+{/block}
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            menu_name: function(value){
+                if(value.length <= 0){
+                    return '菜单名称不能为空';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('menu/create')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("增加成功", {icon: 6},function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

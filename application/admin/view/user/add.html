@@ -1,0 +1,78 @@
+{include file="public:header" /}
+{block name="centent"}
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="menu_name" class="layui-form-label">
+                <span class="x-red">*</span>用户名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="menu_name" name="uname" required="required" lay-verify="menu_name"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_module" class="layui-form-label">
+                <span class="x-red"></span>密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="menu_module" name="password" required="required" lay-verify="menu_name"
+                       autocomplete="off" class="layui-input" placeholder="密码留空默认为123456">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="禁用">
+                <input type="radio" name="status" value="0" title="正常" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+{/block}
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            menu_name: function(value){
+                if(value.length <= 0){
+                    return '用户名不能为空';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('user/add')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("增加成功", {icon: 6},function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

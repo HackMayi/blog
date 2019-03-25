@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>响应式简单个性个人博客模板</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" type="text/css" href="/static/home/blog/css/index.css" media="all" />
+</head>
+
+<body class="home blog custom-background round-avatars">
+{include file="public:top" /}
+<div id="main" class="content">
+    <div class="container">
+        <style>
+            body.custom-background {
+                background: #fff
+            }
+
+            .container {
+                padding: 10px 0px;
+            }
+        </style>
+        <section class="post_content">
+            <header class="post_header">
+                <h1 class="post_title">友情链接</h1>
+            </header>
+            <div class="links">
+                <h3 class="catalog-title">Life Blog</h3>
+                <div class="catalog-description"></div>
+                <div class="catalog-share">{:count($links)} items in collection</div>
+                <div class="userItems">
+                    {notempty name="$links"}
+                    {volist name="$links" id="vo"}
+                        <div class="userItem">
+                        <div class="userItem--inner">
+                            <div class="userItem-content"><img alt='' src='/static/home/blog/images/8e5da64c712d2bb59235d8d746108cb1.jpeg' class='avatar avatar-64 photo' height='64' width='64' />
+                                <div class="userItem-name">
+                                    <a class="link link--primary" href="{$vo.jump_url}" target="_blank">{$vo.web_name}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/volist}
+                    {/notempty}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+    {include file="public:footer" /}
+    <script type='text/javascript' src='/static/home/blog/js/jquery.min.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/plugins.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/script.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/particles.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/aos.js'></script>
+
+</body>
+
+</html>

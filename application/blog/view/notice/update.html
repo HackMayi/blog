@@ -1,0 +1,93 @@
+{include file="admin@public:header" /}
+{block name="centent"}
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">封面</label>
+            <div class="layui-input-inline" style="width: 50%">
+                <input type="text" name="cover" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$result.cover}">
+                <input type="hidden" name="path" value="">
+            </div>
+            <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传封面
+            </button>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="width: 50%">
+                <img src="{$result.cover}" alt="" width="80px">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" placeholder="请输入内容" required class="layui-textarea">{$result.content}</textarea>
+            </div>
+            <input type="hidden" name="id" value="{$result.id}">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="edit" lay-submit="">
+                修改
+            </button>
+        </div>
+    </form>
+</div>
+{/block}
+
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            menu_name: function(value){
+                if(value.length < 0){
+                    return '分类名称不能为空';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(edit)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('notice/update')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("修改成功", {icon: 6},function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: 'upload' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                if (res.code) {
+                    $('input[name="cover"]').val(res.data.path);
+                    $('input[name="path"]').val(res.data.path_url);
+                } else {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+    });
+</script>

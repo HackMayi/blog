@@ -1,0 +1,94 @@
+{include file="public:header" /}
+{include file="public:menu" /}
+<div class="w_container">
+    <div class="container">
+        <div class="row w_main_row">
+
+            <ol class="breadcrumb w_breadcrumb">
+                <li><a href="{:url('blog/index')}">首页</a></li>
+                <li class="active">文章</li>
+                <span class="w_navbar_tip">我们长路漫漫，只因学无止境。</span>
+            </ol>
+
+            <div class="col-lg-9 col-md-9 w_main_left">
+                <div class="panel panel-default">
+                    <div class="panel-body contentList">
+                        {notempty name="$articles.list"}
+                            {volist name="$articles.list" id="vo"}
+                                <div class="panel panel-default w_article_item">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-md-3">
+                                            <a href="{:url('blog/detail',['id'=>$vo.id])}" class="thumbnail w_thumbnail">
+                                                <img src="{$vo.cover}" alt="...">
+                                            </a>
+                                        </div>
+
+                                        <h4 class="media-heading">
+                                            <a class="title" href="{:url('blog/detail',['id'=>$vo.id])}">{$vo.title}</a>
+                                        </h4>
+                                        <!--<p><a class="label label-default">Nginx</a><a class="label label-default">tomcat负载均衡</a></p>-->
+                                        <p class="w_list_overview overView">{$vo.intro}</p>
+                                        <p class="count_r"><span class="count"><i class="glyphicon glyphicon-user"></i><a href="#">admin</a></span> <span class="count"><i class="glyphicon glyphicon-eye-open"></i>阅读:{$vo.read_number}</span><span class="count"><i class="glyphicon glyphicon-comment"></i>评论:{$vo.comment_count|default=0}</span><span class="count"><i class="glyphicon glyphicon-time"></i>{$vo.create_at|date="Y-m-d H:i:s",###}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            {/volist}
+                        {/notempty}
+
+
+                        <!--<div class="page">
+                            <nav aria-label="Page navigation">
+                          <ul class="pagination">
+                            <li>
+                              <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                              <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                        </div>-->
+                        <!--<div id="page">-->
+                            <!---->
+                        <!--</div>-->
+
+                        {$articles.page}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3 col-md-3 w_main_right">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">最新发布</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled sidebar">
+                            {notempty name="$ranking.list"}
+                                {volist name="$ranking.list" id="vo"}
+                                    <li><a href="{:url('blog/detail',['id'=>$vo.id])}">{$vo.title}</a></li>
+                                {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                </div>
+
+                {include file="public:links" /}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{include file="public:footer" /}

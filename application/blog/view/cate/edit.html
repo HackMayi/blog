@@ -1,0 +1,87 @@
+{include file="admin@public:header" /}
+{block name="centent"}
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="menu_name" class="layui-form-label">
+                <span class="x-red">*</span>分类名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="id" value="{$result.id}">
+                <input type="text" id="menu_name" name="cate_name" required="required" lay-verify="menu_name"
+                       autocomplete="off" class="layui-input" value="{$result.cate_name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="menu_type" class="layui-form-label">
+                <span class="x-red">*</span>分类标志
+            </label>
+            <div class="layui-input-inline">
+                <select id="menu_type" name="cate_type" lay-verify="">
+                    <option value="0" {if condition="$result.cate_type eq 0"}selected{/if}>推荐</option>
+                    <option value="1" {if condition="$result.cate_type eq 1"}selected{/if}>热门</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" title="隐藏" {if condition="$result.status eq 0"}checked{/if}>
+                <input type="radio" name="status" value="1" title="显示" {if condition="$result.status eq 1"}checked{/if}>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">分类描述</label>
+            <div class="layui-input-block">
+                <textarea name="describe" placeholder="请输入分类简单描述" class="layui-textarea">{$result.describe}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="">
+                修改
+            </button>
+        </div>
+    </form>
+</div>
+{/block}
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            menu_name: function(value){
+                if(value.length < 0){
+                    return '分类名称不能为空';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('cate/update')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("修改成功", {icon: 6},function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

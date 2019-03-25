@@ -1,0 +1,140 @@
+{include file="public:header" /}
+{include file="public:menu" /}
+<div class="w_container">
+    <div class="container">
+        <div class="row w_main_row">
+
+            <ol class="breadcrumb w_breadcrumb">
+                <li><a href="{:url('blog/index')}">首页</a></li>
+                <li><a href="{:url('blog/cate',['cate_id'=>$article.cate_id])}">{$article.cate_name}</a></li>
+                <li class="active">{:mb_substr($article.title,0,20)}</li>
+                <span class="w_navbar_tip">我们长路漫漫，只因学无止境。</span>
+            </ol>
+
+            <div class="col-lg-9 col-md-9 w_main_left">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="c_titile">{$article.title}</h2>
+                        <p class="box_c"><span class="d_time">发布时间：{$article.create_at|date="Y-m-d H:i:s",###}</span><span>编辑：<a href="mailto:wfyv@qq.com">admin</a></span><span>阅读（{$article.read_number}）</span></p>
+                        <ul class="infos">
+                            {$article.content}
+                        </ul>
+
+                        <div class="keybq">
+                            <!--<p><span>关键字</span>：<a class="label label-default">个人博客</a><a class="label label-default">阿里云</a><a class="label label-default">空间</a></p>-->
+                            <p><span>分类</span>：<a href="{:url('blog/cate',['cate_id'=>$article.cate_id])}" class="label label-default">{$article.cate_name}</a>
+                        </div>
+
+
+
+                        <div class="nextinfo">
+                            <p class="last">上一篇：<a href="{empty name='$lastArticle'}#{else /}{:url('blog/detail',['id'=>$lastArticle.id])}{/empty}">{$lastArticle.title|default="暂无上一篇"}</a></p>
+                            <p class="next">下一篇：<a href="{empty name='$nextArticle'}#{else /}{:url('blog/detail',['id'=>$nextArticle.id])}{/empty}">{$nextArticle.title|default="暂无下一篇"}</a></p>
+                        </div>
+
+                    </div>
+                </div>
+                {notempty name="$result.list"}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+
+                            {volist name="$result.list" id="vo"}
+                            <div class="panel-heading">{$vo.nickname|default="游客"}说:</div>
+                            <div class="panel-body">
+                                {$vo.content}
+                            </div>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+                {/notempty}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <!--<center><div id="cyReward" role="cylabs" data-use="reward" sid="5eab7e4c363e4cb8bed0efa3604e6b42"></div></center>
+                        <div id="cyEmoji" role="cylabs" data-use="emoji" sid="5eab7e4c363e4cb8bed0efa3604e6b42"></div>-->
+
+                        <!--评论-->
+                        <form id="commentForm" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputNickName" class="col-sm-2 control-label">昵称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="nickname" class="form-control" id="inputNickName" placeholder="nickname">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
+                                <div class="col-sm-10">
+                                    <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputContent" class="col-sm-2 control-label">评论内容</label>
+                                <div class="col-sm-10">
+                                    <input type="hidden" name="article_id" value="{$article.id}">
+                                    <textarea name="content" class="form-control" rows="3" id="inputContent" placeholder="您不说两句吗~~~" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="button" class="btn btn-default" id="comment">评论</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 w_main_right">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">最新发布</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled sidebar">
+                            {notempty name="$ranking.list"}
+                                {volist name="$ranking.list" id="vo"}
+                                    <li><a href="{:url('blog/detail',['id'=>$vo.id])}">{$vo.title}</a></li>
+                                {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                </div>
+
+                {include file="public:links" /}
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public:footer" /}
+<script>
+    $('#comment').click(function () {
+        var data = {};
+        var result = $('#commentForm').serializeArray();
+        $.each(result, function() {
+            data[this.name] = this.value;
+        });
+        if (data.content.length <= 0) {
+            toastr.warning('评论内容不能为空');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "{:url('blog/addComment')}",
+            data: {type:'comment',data:data},
+            dataType: "json",
+            success: function(data){
+                if (data.code) {
+                    toastr.success(data.msg);
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    },2000);
+                } else {
+                    toastr.error(data.msg)
+                }
+            }
+        });
+        return false;
+    });
+</script>

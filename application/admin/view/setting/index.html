@@ -1,0 +1,184 @@
+{include file="public:header" /}
+{block name="centent"}
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">网站设置</a>
+        <a><cite>网站配置</cite></a>
+      </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        <li class="layui-this">后台配置</li>
+        <li>博客配置</li>
+        <!--<li>权限分配</li>
+        <li>商品管理</li>
+        <li>订单管理</li>-->
+    </ul>
+    <div class="layui-tab-content" style="height: auto">
+        <!--后台设置-->
+        <div class="layui-tab-item layui-show">
+            <div class="x-body">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="title" required lay-verify="required" placeholder="请输入网站标题" autocomplete="off" class="layui-input" value="{:config('web_setting.title')}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">将显示在浏览器窗口标题等位置</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">ICP备案号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="icp" lay-verify="" placeholder="ICP备案号" autocomplete="off" class="layui-input" value="{:config('web_setting.icp')}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">请填写ICP备案号</div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">Footer内容</label>
+                        <div class="layui-input-block">
+                            <textarea name="footer" placeholder="请输入用于网站底部展示的信息" class="layui-textarea">{:config('web_setting.footer')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="describe" placeholder="网页的描述信息，搜索引擎采纳后，作为搜索结果中的页面摘要显示，建议不超过80个字" class="layui-textarea">{:config('web_setting.describe')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站关键词</label>
+                        <div class="layui-input-block">
+                            <textarea name="keywords" placeholder="请输入网站关键词,多个以','隔开" class="layui-textarea">{:config('web_setting.keywords')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" name="genre" value="admin">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--博客设置-->
+        <div class="layui-tab-item">
+            <div class="x-body">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">站点名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="home_title" required lay-verify="required" placeholder="请输入网站标题" autocomplete="off" class="layui-input" value="{:config('blog_setting.home_title')}">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">将显示在浏览器窗口标题等位置</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站开关</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="web_type" value="0" title="关闭">
+                            <input type="radio" name="web_type" value="1" title="开启" checked>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">展示二维码</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="is_qrcode" value="0" title="隐藏">
+                            <input type="radio" name="is_qrcode" value="1" title="展示" checked>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">首页二维码</label>
+                        <div class="layui-input-inline" style="width: 50%">
+                            <input type="text" name="home_qrcode" placeholder="" autocomplete="off" class="layui-input" value="{:config('blog_setting.home_qrcode')}">
+                            <input type="hidden" name="path" value="{:config('blog_setting.path')}">
+                        </div>
+                        <button type="button" class="layui-btn" id="test1">
+                            <i class="layui-icon">&#xe67c;</i>上传封面
+                        </button>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">站点公告</label>
+                        <div class="layui-input-block">
+                            <textarea name="home_notice" placeholder="将展示在首页公告栏" class="layui-textarea">{:config('blog_setting.home_notice')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">Footer内容</label>
+                        <div class="layui-input-block">
+                            <textarea name="home_footer" placeholder="请输入用于网站底部展示的信息" class="layui-textarea">{:config('blog_setting.home_footer')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="home_describe" placeholder="网页的描述信息，搜索引擎采纳后，作为搜索结果中的页面摘要显示，建议不超过80个字" class="layui-textarea">{:config('blog_setting.home_describe')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">网站关键词</label>
+                        <div class="layui-input-block">
+                            <textarea name="home_keywords" placeholder="请输入网站关键词,多个以','隔开" class="layui-textarea">{:config('blog_setting.home_keywords')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" name="genre" value="blog">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--<div class="layui-tab-item">3</div>
+        <div class="layui-tab-item">4</div>
+        <div class="layui-tab-item">5</div>
+        <div class="layui-tab-item">6</div>-->
+    </div>
+</div>
+
+{/block}
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('setting/set')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.msg(data.msg,function(){
+                            location.href="{:url('setting/index')}"
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: 'upload' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                if (res.code) {
+                    $('input[name="home_qrcode"]').val(res.data.path);
+                    $('input[name="path"]').val(res.data.path_url);
+                } else {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+    });
+</script>

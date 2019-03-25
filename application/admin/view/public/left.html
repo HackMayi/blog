@@ -1,0 +1,39 @@
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            {volist name="$lists" id="vo"}
+            {notempty name="$vo.node"}
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">{$vo.icon}</i>
+                    <cite>{$vo.name}</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    {volist name="$vo.node" id="no"}
+                    <li>
+                        <a _href="{$no.url}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>{$no.name}</cite>
+                        </a>
+                        {notempty name="$no.node"}
+                        <ul class="sub-menu">
+                            {volist name="$no.node" id="three"}
+                            <li>
+                                <a _href="{$three.url}">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>{$three.name}</cite>
+                                </a>
+                            </li >
+                            {/volist}
+                        </ul>
+                        {/notempty}
+                    </li>
+                    {/volist}
+                </ul>
+            </li>
+            {/notempty}
+            {/volist}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+{include file="public:header" /}
+{include file="public:menu" /}
+<div class="w_container">
+    <div class="container">
+        <div class="row w_main_row">
+            <ol class="breadcrumb w_breadcrumb">
+                <li><a href="{:url('blog/index')}">首页</a></li>
+                <li class="active">评论</li>
+                <span class="w_navbar_tip">你，生命中最重要的过客，之所以是过客，因为你未曾为我停留。</span>
+            </ol>
+
+            <div class="col-lg-9 col-md-9 w_main_left">
+                {notempty name="$result.list"}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+
+                            {volist name="$result.list" id="vo"}
+                            <div class="panel-heading">{$vo.nickname|default="游客"}说:</div>
+                            <div class="panel-body">
+                                {$vo.content}
+                            </div>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+                {/notempty}
+                <!--评论-->
+                <form id="commentForm" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputNickName" class="col-sm-2 control-label">昵称</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="nickname" class="form-control" id="inputNickName" placeholder="nickname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUrl" class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="web_url" class="form-control" id="inputUrl" placeholder="互换友链请填写友链地址,可留空">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputContent" class="col-sm-2 control-label">留言内容</label>
+                        <div class="col-sm-10">
+                            <textarea name="content" class="form-control" rows="3" id="inputContent" placeholder="您不说两句吗~~~" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-default" id="comment">留言</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+            <div class="col-lg-3 col-md-3 w_main_right">
+                <img src="/static/home/img/slider/aboutphoto.png" />
+            </div>
+
+        </div>
+    </div>
+</div>
+{include file="public:footer" /}
+<script>
+    $('#comment').click(function () {
+        var data = {};
+        var result = $('#commentForm').serializeArray();
+        $.each(result, function() {
+            data[this.name] = this.value;
+        });
+        if (data.content.length <= 0) {
+            toastr.warning('评论内容不能为空');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "{:url('blog/addComment')}",
+            data: {type:'message',data:data},
+            dataType: "json",
+            success: function(data){
+                if (data.code) {
+                    toastr.success(data.msg);
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    },2000);
+                } else {
+                    toastr.error(data.msg)
+                }
+            }
+        });
+        return false;
+    });
+</script>

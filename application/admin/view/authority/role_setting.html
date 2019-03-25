@@ -1,0 +1,50 @@
+{include file="public:header" /}
+{block name="centent"}
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择角色</label>
+        {notempty name="roles"}
+        {volist name="roles" id="vo"}
+        <div class="layui-input-block">
+            <input type="radio" name="role_id" title="{$vo.name}" value="{$vo.id}" {eq name="$vo.id" value="$result.role_id|default=''"}checked{/eq}/>
+        </div>
+        {/volist}
+        {/notempty}
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input type="hidden" name="id" value="{$id}">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('authority/role_setting')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("设置成功", {icon: 6},function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            // layer.msg();
+            return false;
+        });
+    });
+</script>

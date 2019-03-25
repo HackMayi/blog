@@ -1,0 +1,109 @@
+{include file="public:header" /}
+{block name="centent"}
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">权限管理</a>
+        <a>
+          <cite>角色列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+        <button class="layui-btn" onclick="x_admin_show('创建角色','{:url("authority/role_add")}',600,600)"><i class="layui-icon"></i>创建角色</button>
+        <span class="x-right" style="line-height:40px">共有数据：{0} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <!--<th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>-->
+            <th>ID</th>
+            <th>角色名称</th>
+            <th>角色描述</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {empty name="$roles"}
+        <tr>
+            <td colspan="6" style=" text-align:center;">
+                暂无角色
+            </td>
+        </tr>
+        {else /}
+        {volist name="$roles" id="vo"}
+        <tr>
+            <!--<td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+            </td>-->
+            <td>{$vo.id}</td>
+            <td>{$vo.name}</td>
+            <td>{$vo.remark}</td>
+            <td class="td-manage">
+                <a title="{$vo.name}权限设置"  onclick="x_admin_show('{$vo.name}--权限设置','{:url("authority/rule_setting",['id'=>$vo.id])}',600,600)" href="javascript:;"><i class="layui-icon">&#xe716;</i></a>
+                <a title="编辑"  onclick="x_admin_show('编辑角色','{:url("authority/role_edit",['id'=>$vo.id])}',600,600)" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i></a>
+                <a title="删除" onclick="member_del(this,{$vo.id})" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        {/empty}
+        </tbody>
+    </table>
+</div>
+{/block}
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type: "POST",
+                url: "{:url('authority/delete_role')}",
+                data: {id:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        $(obj).parents("tr").remove();
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+
+
+
+    function delAll (argument) {
+
+        var data = tableCheck.getData();
+
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>

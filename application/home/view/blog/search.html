@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>响应式简单个性个人博客模板</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" type="text/css" href="/static/home/blog/css/index.css" media="all" />
+</head>
+
+<body class="home blog custom-background round-avatars">
+{include file="public:top" /}
+<div id="main" class="content">
+
+    <div class="container">
+
+        <h1 class="page-title">以&ldquo;{$Think.get.search}&rdquo;为关键字</h1>
+
+        <p class="Searchmeta">共计 {:count($result.list)} 篇文章</p>
+
+        <div class="location">当前位置：
+            <a href="">首页</a> &raquo; 搜索结果 &raquo; {$Think.get.search}
+        </div>
+        {notempty name="$result.list"}
+            {volist name="$result.list" id="vo"}
+                <div class="posts-list js-posts">
+
+            <div class="archive-post">
+
+                <div class="type">
+                    <div class="mask"><i class="iconfont">&#xe603;</i></div>
+                </div>
+
+                <h2 class="archive-title" style="color: #">
+
+					<span>
+
+					<a href="{:url('blog/detail',['id'=>$vo.id])}">{$vo.title}</a>
+
+					</span>
+
+                    <div class="post-time">{$vo.create_at|date="Y/m/d H:i:s",###}</div>
+
+                </h2>
+               <!-- <div class="post-category">
+                    <a href="" rel="category tag">Happen</a>
+                </div>-->
+            </div>
+        </div>
+            {/volist}
+        {/notempty}
+        <div class="mt+">
+            <div class="pagination js-pagination">
+                <div class="js-next pagination__load"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    {include file="public:footer" /}
+    <script type='text/javascript' src='/static/home/blog/js/jquery.min.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/plugins.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/script.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/particles.js'></script>
+    <script type='text/javascript' src='/static/home/blog/js/aos.js'></script>
+
+</body>
+
+</html>

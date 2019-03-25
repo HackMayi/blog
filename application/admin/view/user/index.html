@@ -1,0 +1,107 @@
+{include file="public:header" /}
+{block name="centent"}
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">控制台</a>
+        <a>
+          <cite>个人信息修改</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-col-md6">
+            <!--个人信息-->
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value="{$Think.session.username}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">Email</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" required  lay-verify="email" placeholder="" autocomplete="off" class="layui-input" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="password" placeholder="若不修改则留空" autocomplete="off"  class="layui-input" value="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-md3"></div>
+        <div class="layui-col-md6">
+            <!--操作日志-->
+            <div class="layui-field-box">
+                <span>操作日志</span>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>标题</th>
+                            <th>链接</th>
+                            <th>操作IP</th>
+                            <th>操作时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {empty name="$data.list"}
+                            <tr>
+                                <td colspan="5" style=" text-align:center;">
+                                    暂无记录
+                                </td>
+                            </tr>
+                        {else /}
+                            {volist name="$data.list" id="vo"}
+                                <tr>
+                                    <td>{$vo.id}</td>
+                                    <td>{$vo.title}</td>
+                                    <td>{$vo.url}</td>
+                                    <td>{:long2ip($vo.log_ip)}</td>
+                                    <td>{$vo.log_at|date="Y-m-d H:i:s",###}</td>
+                                </tr>
+                            {/volist}
+                        {/empty}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+</div>
+{/block}
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            $.ajax({
+                type: "POST",
+                url: "{:url('user/index')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.msg(data.msg,function(){
+                            location.href="{:url('setting/index')}"
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+</script>

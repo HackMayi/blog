@@ -1,0 +1,149 @@
+{include file="admin@public:header" /}
+{block name="centent"}
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">博客管理</a>
+        <a>
+          <cite>评论列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+    <form class="layui-form layui-col-md12 x-so">
+        <div class="layui-input-inline">
+            <select name="type">
+                <option>类型</option>
+                <option value="0" {if condition="$Think.get.type eq 0"}selected{/if}>留言</option>
+                <option value="1" {if condition="$Think.get.type eq 1"}selected{/if}>评论</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="status">
+                <option>状态</option>
+                <option value="1" {if condition="$Think.get.status eq 1"}selected{/if}>已通过</option>
+                <option value="0" {if condition="$Think.get.status eq 0"}selected{/if}>待审核</option>
+            </select>
+        </div>
+        <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+    </form>
+    </div>
+    <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="check()"><i class="layui-icon"></i>批量审核</button>
+        <span class="x-right" style="line-height:40px">共有数据：{:count($menu.list)} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>ID</th>
+            <th>评论/留言</th>
+            <th>昵称</th>
+            <th>邮箱</th>
+            <th>网址</th>
+            <th>评论文章</th>
+            <th>评论内容</th>
+            <th>状态</th>
+            <th>评论时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {empty name="$menu.list"}
+        <tr>
+            <td colspan="10" style=" text-align:center;">
+                暂无评论
+            </td>
+        </tr>
+        {else /}
+        {volist name="$menu['list']" id="vo"}
+        <tr>
+            <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id={$vo.id}><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td>{$vo.id}</td>
+            <td>{$vo.article_id ? '评论' : '留言'}</td>
+            <td>{$vo.nickname|default="游客"}</td>
+            <td>{$vo.email}</td>
+            <td>{$vo.web_url}</td>
+            <td>{:mb_substr($vo.title,0,20)}</td>
+            <td>{$vo.content}</td>
+            <td>{$vo.status?'显示':'审核'}</td>
+            <td>{$vo.create_at}</td>
+            <td class="td-manage">
+                <a title="删除" onclick="member_del(this,{$vo.id})" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+                <a title="查看"  onclick="x_admin_show('查看评论','{:url("comment/review",['id'=>$vo.id])}',600,600)" href="javascript:;">
+                <i class="layui-icon">&#xe674;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        {/empty}
+        </tbody>
+    </table>
+</div>
+{/block}
+<script>
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type: "POST",
+                url: "{:url('comment/delete')}",
+                data: {id:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        $(obj).parents("tr").remove();
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+
+    function check () {
+
+        var data = tableCheck.getData();
+        if (JSON.stringify(data) === '[]') {
+            layer.msg('请先选中操作元素', {icon: 2});
+            return false;
+        }
+        layer.confirm('审核通过即可显示？',function(index){
+            $.ajax({
+                type: "POST",
+                url: "{:url('comment/check')}",
+                data: {id:data},
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.msg(data.msg);
+                        location.replace(location.href);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+        });
+    }
+
+
+    function delAll (argument) {
+
+        var data = tableCheck.getData();
+
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>

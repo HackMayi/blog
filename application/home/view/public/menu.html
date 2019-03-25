@@ -1,0 +1,27 @@
+<div class="w_header">
+    <div class="container">
+        <div class="w_header_top">
+            <a href="#" class="w_logo"></a>
+            <span class="w_header_nav">
+					<ul>
+						<li><a href="{:url('blog/index')}" class="active">首页</a></li>
+						<!--<li><a href="{:url('blog/about')}">关于</a></li>-->
+                        {notempty name="$menu"}
+                            {volist name="$menu" id="vo"}
+                                <li><a href="{:url('blog/cate',['cate_id'=>$vo.id])}">{$vo.cate_name}</a></li>
+                            {/volist}
+                        {/notempty}
+						<li><a href="{:url('blog/message')}">留言</a></li>
+					</ul>
+				</span>
+            <div class="w_search">
+                <form action="">
+                    <div class="w_searchbox">
+                        <input type="text" name="keywords" value="{$Think.get.keywords}" placeholder="search" />
+                        <button type="submit">搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

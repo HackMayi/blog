@@ -1,0 +1,75 @@
+{include file="admin@public:header" /}
+{block name="centent"}
+<fieldset class="layui-elem-field">
+    <legend>评论详情</legend>
+    <div class="layui-field-box">
+        <blockquote class="layui-elem-quote layui-quote-nm">{$comment.content}</blockquote>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red"></span>接收邮箱
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="email" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input" value="{$comment.email}" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label for="desc" class="layui-form-label">
+                回复内容
+                </label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入回复的内容" id="desc" name="contents" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button  class="layui-btn" lay-filter="reply" lay-submit="">
+                   回复
+                </button>
+            </div>
+        </form>
+    </div>
+</fieldset>
+{/block}
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //监听提交
+        form.on('submit(reply)', function(data){
+            var check_email = '{$comment.email}';
+            if (data.field.contents.length <= 0) {
+                layer.msg('回复内容不能为空');
+                return false;
+            }
+            if (data.field.email !== check_email) {
+                layer.msg('邮箱地址不正确');
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "{:url('comment/reply')}",
+                data: data.field,
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        layer.alert("回复成功", {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,46 @@
+<div class="w_foot">
+    <div class="w_foot_copyright">{notempty name=":config('blog_setting.home_footer')"}{:config('blog_setting.home_footer')}{/notempty}<span>|</span>
+        <a target="_blank" href="http://www.miitbeian.gov.cn/" rel="nofollow">{notempty name=":config('web_setting.icp')"}{:config('web_setting.icp')}{/notempty}</a>
+    </div>
+</div>
+<div id="shape">
+    <div class="shapeColor">
+        <div class="shapeFly">
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var $backToTopEle = $('<a href="javascript:void(0)" class="Hui-iconfont toTop" title="返回顶部" alt="返回顶部" style="display:none">^</a>').appendTo($("body")).click(function() {
+        $("html, body").animate({ scrollTop: 0 }, 120);
+    });
+    var backToTopFun = function() {
+        var st = $(document).scrollTop(),
+            winh = $(window).height();
+        (st > 0) ? $backToTopEle.show(): $backToTopEle.hide();
+        /*IE6下的定位*/
+        if(!window.XMLHttpRequest) {
+            $backToTopEle.css("top", st + winh - 166);
+        }
+    };
+
+    $(function() {
+        $(window).on("scroll", backToTopFun);
+        backToTopFun();
+    });
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+</html>

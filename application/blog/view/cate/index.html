@@ -1,0 +1,119 @@
+{include file="admin@public:header" /}
+{block name="centent"}
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">博客管理</a>
+        <a>
+          <cite>分类列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+        <button class="layui-btn" onclick="x_admin_show('添加分类','{:url("cate/add")}',600,600)"><i class="layui-icon"></i>添加分类</button>
+        <span class="x-right" style="line-height:40px">共有数据：{:count($menu)|0} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <!--<th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>-->
+            <th>ID</th>
+            <th>名称</th>
+            <th>标志</th>
+            <th>状态</th>
+            <th>描述</th>
+            <th>点击量</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {empty name="$menu"}
+        <tr>
+            <td colspan="8" style=" text-align:center;">
+                暂无分类
+            </td>
+        </tr>
+        {else /}
+        {volist name="$menu" id="vo"}
+        <tr>
+            <!--<td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+            </td>-->
+            <td>{$vo.id}</td>
+            <td>{$vo.str}{$vo.cate_name}</td>
+            <td>{$vo.cate_type?'<a href="javaScript:;" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-warm">热门</a>':'<a href="javaScript:;" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">推荐</a>'}</td>
+            <td>
+                {$vo.status?'<a href="javaScript:;" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-warm">显示</a>':'<a href="javaScript:;" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-radius layui-btn-danger">隐藏</a>'}</a>
+                </td>
+            <td>{$vo.describe}</td>
+            <td>{$vo.click_sum}</td>
+            <td>{$vo.create_at}</td>
+            <td class="td-manage">
+                <a title="编辑"  onclick="x_admin_show('编辑菜单','{:url("cate/update",['id'=>$vo.id])}',600,600)" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+                </a>
+                <a title="删除" onclick="member_del(this,{$vo.id})" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        {/empty}
+        </tbody>
+    </table>
+</div>
+{/block}
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type: "POST",
+                url: "{:url('cate/delete')}",
+                data: {id:id},
+                dataType: "json",
+                success: function(data){
+                    if (data.code) {
+                        $(obj).parents("tr").remove();
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+
+
+
+    function delAll (argument) {
+
+        var data = tableCheck.getData();
+
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>
