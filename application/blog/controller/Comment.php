@@ -51,8 +51,8 @@ class Comment extends Common
                 $mail->CharSet = "utf8";// 编码格式为utf8，不设置编码的话，中文会出现乱码
                 $mail->Host = "smtp.163.com";// 发送方的SMTP服务器地址
                 $mail->SMTPAuth = true;// 是否使用身份验证
-                $mail->Username = "19767@163.com";/// 发送方的163邮箱用户名，就是你申请163的SMTP服务使用的163邮箱
-                $mail->Password = "Hackmayi00";// 发送方的邮箱密码，注意用163邮箱这里填写的是“客户端授权密码”而不是邮箱的登录密码！
+                $mail->Username = "197XXX@163.com";/// 发送方的163邮箱用户名，就是你申请163的SMTP服务使用的163邮箱
+                $mail->Password = "XXXXXXXXXX";// 发送方的邮箱密码，注意用163邮箱这里填写的是“客户端授权密码”而不是邮箱的登录密码！
                 $mail->SMTPSecure = "ssl";// 使用ssl协议方式
                 $mail->Port = 465;// 163邮箱的ssl协议方式端口号是465/994
                 $mail->setFrom("19767@163.com","佩晨博客");// 设置发件人信息，如邮件格式说明中的发件人，这里会显示为Mailer(xxxx@163.com），Mailer是当做名字显示
