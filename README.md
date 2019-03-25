@@ -1,4 +1,4 @@
-ThinkPHP 5.0
+ThinkPhp5.0 +  X-admin 前端模板,博客使用黑色主题模板
 ===============
 
 [![Total Downloads](https://poser.pugx.org/topthink/think/downloads)](https://packagist.org/packages/topthink/think)
