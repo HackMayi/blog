@@ -6,11 +6,21 @@ ThinkPhp5.0 + X-admin 前端模板,博客使用黑色主题模板
 [![Latest Unstable Version](https://poser.pugx.org/topthink/think/v/unstable)](https://packagist.org/packages/topthink/think)
 [![License](https://poser.pugx.org/topthink/think/license)](https://packagist.org/packages/topthink/think)
 
-数据库使用thinkPHP migrate创建
+1,安装
+
  + 1,克隆代码
- + git clone https://github.com/HackMayi/blog.git
+        
+        git clone https://github.com/HackMayi/blog.git
+
+ + 2,安装
  
- + 2,修改database数据库配置创建数据库
+        composer install
+
+
+2,数据库使用thinkPHP migrate创建
+
+ 
+ + 1,修改database数据库配置创建数据库
  
         // 服务器地址
         'hostname'        => '127.0.0.1',
@@ -21,15 +31,15 @@ ThinkPhp5.0 + X-admin 前端模板,博客使用黑色主题模板
         // 密码
         'password'        => '',
         
- + 3,创建数据表
+ + 2,创建数据表
  +  php think migrate
         
         默认登录密码:
         admin  123456
- + 4,后台地址
+ + 3,后台地址
         
         xxx.com/admin/index/index 
- + 5,配置网站信息
+ + 4,配置网站信息
  
  
 
